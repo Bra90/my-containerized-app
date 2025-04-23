@@ -1,38 +1,21 @@
-name: Build and Deploy to Docker Hub
+name: Deploy Express Demo
+
 on:
   push:
     branches: [main]
 
 jobs:
-  build-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: brando90
-          password: dckr_pat_3ku4DzYDNjLSwMdI0IRjd9XFKt0
-
-      - name: Build and push to Docker Hub
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: |
-            brando90/express-demo:latest
-            brando90/express-demo:${{ github.sha }}
-
-      # Simple deployment via SSH (replace with your server details)
-      - name: Deploy to Server
+      - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: 192.168.88.129
-          username: brando
-          key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDdT/+S5SrfewT4wPyqwpv0Ulr3PLXFC8iBRLfCP+33c6MbLjGlD5d7dRZXWeX0BHUt1o5whUYCDwAVMnx2ji6KH6F6HkEuBcRb//xZgxHhdXVz/vqokRD8flY697EyRJ9noANsg27trkmvO0SB9uPwB7ykut02u+ikeU0yh6IcXWRPg9CPXqBIDB3a4UTW9MVCKPfLRLfQsEgMFQMe511smSn57UJeIuuVj03PLvoooqfQLMaHn/6v1HjXRcDDAE/qaABnyJF869YQG5XP0EzpegOBQAS230HgkOEF5xCWhDS5h6dPXemyZYWSivylYnxN6QzQqrceGi3wyE7O7A3Fl5zIVWELPJdHE5oiDAbBUR3XhcrHyAJxPE6/XNN8Jjd54Gc4P/wwm1XFyvd1ZxRWQok4lKv1CkekHOevZ6l9Ye52kYa6zRcASKL/939/dz/SiiNDSq/NdvlDJ2iVaZDbb7YrbzNbUgGFBYiHBQjbNAX0KXrW35UzXt0f2GZhNSPF6spCDBjzMRpKoYjnRfLT2TbxMC86dzb8JH3RJfRTMfSjGNruFOusxVlk88kceePYcFL3o1EOkR/tUJ4MQu/NJXcydXP4Dj+rCYhICUUhjyi8XThJWM7+DRYW0fEUGCRD9raFw7TCap7obZWdrPACgxTpyj+0PrPvAgJjF8xLAw== brandom.sabatini@gmail.com
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             docker pull brando90/express-demo:latest
-            docker stop express-app || true
-            docker rm express-app || true
+            docker stop express-demo || true
+            docker rm express-demo || true
+            docker run -d --name express-demo -p 3000:3000 brando90/express-demo:latest
