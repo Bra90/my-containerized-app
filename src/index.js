@@ -1,10 +1,15 @@
-const http = require('http');
+const express = require('express');
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-const server = http.createServer((req, res) => {
-  res.end('Hello from Dockerized Node.js app!');
+app.get('/', (req, res) => {
+  res.send(`
+    <h1>DevOps with Docker Exercise 3.2</h1>
+    <p>Successfully deployed from GitHub!</p>
+    <p>Repository: <a href="https://github.com/Bra90/my-containerized-app">Bra90/my-containerized-app</a></p>
+  `);
 });
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
