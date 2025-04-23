@@ -10,6 +10,9 @@ Repository for Exercise 3.2: Deployment pipeline to a cloud service
 ## Live Application
 http://YOUR_SERVER_IP:3000
 
+![image](https://github.com/user-attachments/assets/dcf9d705-7ea3-451f-ad51-c5d393842721)
+
+
 ## Features
 - Automatic deployment on Git push
 - Uses public Docker image [brando90/express-demo](https://hub.docker.com/r/brando90/express-demo)
